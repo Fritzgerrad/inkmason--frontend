@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import StoreProvider from "./StoreProvider";
+import Footer from "@src/components/Footer";
+import Header from "@src/components/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,12 +18,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`font-M text-gray-600`}>
+    <html lang="en" className="h-full">
+      <body className="h-full flex flex-col font-M text-gray-600">
         <StoreProvider>
-          {children}
+          <div className="flex flex-col min-h-screen">
+          <Header />
+            <div className="flex-grow m-2" style={{ backgroundColor: '#fafafa' }}>
+              {children}
+            </div>
+          <Footer />
+          </div>
         </StoreProvider>
-      </body>    
-  </html>
-);
+      </body>
+    </html>
+  );
 }
