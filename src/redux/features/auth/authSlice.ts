@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { access } from 'fs';
 
 interface Notification {
   id?: number;
@@ -11,7 +10,6 @@ interface AuthState {
   token: string;
   isAuth: boolean;
   loading: boolean;
-  currentUser: string;
   notificaions: Notification[];
 }
 
@@ -19,7 +17,6 @@ const initialState: AuthState = {
   token: '',
   isAuth: false,
   loading: false,
-  currentUser: '',
   notificaions: [],
 };
 
@@ -35,9 +32,10 @@ export const authSlice = createSlice({
         (note) => note.id !== actions.payload
       );
     },
+
   },
 });
 
-export const { createNotification, dismissNotification } = authSlice.actions;
+export const { createNotification, dismissNotification} = authSlice.actions;
 
 export default authSlice.reducer;

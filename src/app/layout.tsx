@@ -4,7 +4,6 @@ import "./globals.css";
 import StoreProvider from "./StoreProvider";
 import Footer from "@src/components/Footer";
 import Header from "@src/components/Header";
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -17,6 +16,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
   return (
     <html lang="en" className="h-full">
       <body className="h-full flex flex-col font-M text-gray-600">

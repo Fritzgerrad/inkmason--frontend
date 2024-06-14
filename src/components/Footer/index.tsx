@@ -8,13 +8,13 @@ const Footer = () => {
 
     return ( 
         <footer className='text-white'>
-            <div className='flex justify-center'>
-                <div className='w-4/5'>
-                   <h1 className='text-center text-4xl font-D font-bold'>Join the Club</h1>
+            <div className='flex sm:justify-start justify-center'>
+                <div className='w-4/5 md:w-1/2 sm:mx-4'>
+                   <h1 className='text-center sm:text-left text-4xl font-D font-bold'>Join the Club</h1>
                     <p className='text-sm p-2'>Join our email list and get access to specials deals exclusive to our subscribers.</p>
-                    <div className='flex rounded'>
-                        <input type="email" placeholder='Enter your email' className='w-4/5 p-2 border' />
-                        <button className='bg-primary border-l-2  text-sm p-1'>
+                    <div className='flex border rounded sm:w-4/5'>
+                        <input type="email" placeholder='Enter your email' className='w-4/5 p-2 border text-black' />
+                        <button className='bg-primary border-l-2 sm:px-2 text-sm sm:text-lg p-1 sm:w-3/12'>
                             Sign Up
                         </button>
                     </div>
