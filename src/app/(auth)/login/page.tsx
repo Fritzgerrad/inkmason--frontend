@@ -10,6 +10,9 @@ import { loginDataSchema } from '@src/schema/auth.schema';
 import { validateSchema } from '@src/utils/validate-input.utils';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
+import { createUser } from '@src/redux/features/auth/userSlice';
+import { useAppSelector } from '@src/redux/hooks';
+import { UserService } from '@src/libs/user-data.lib';
 
 const formValues = {
   [EMAIL]: '',
@@ -45,9 +48,14 @@ const Login = () => {
     try {
       const { data } = await dispatch(loginUser(formState)).unwrap();
 
-      const { token, role } = data || {};
+      const { token, role,firstname,isVerified,id } = data || {};
       console.log(data)
       TokenService.setToken(token);
+      dispatch(createNotification({ message: 'Logged in successfully', type: 'success' }));
+
+      dispatch(createUser({id,firstname,role}));
+
+      UserService.saveUser({id,firstname,role});
 
       if (role === 'artist') {
         window.location.href = pageRouters.artists;
