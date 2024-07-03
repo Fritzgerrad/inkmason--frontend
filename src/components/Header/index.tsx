@@ -5,8 +5,6 @@ import { pageRouters } from '../../constants/route.constants'
 import { RxHamburgerMenu } from "react-icons/rx";
 import { FaArrowLeft } from "react-icons/fa";
 import { HiShoppingBag } from "react-icons/hi2";
-import { removeUser, selectUser } from "@src/redux/features/auth/userSlice";
-
 import { UserService } from '@src/libs/user-data.lib';
 import { TokenService } from '@src/libs/token.lib';
 import { useAppDispatch } from '@src/redux/hooks';
@@ -16,19 +14,25 @@ import { useRouter } from 'next/navigation';
 export default function Header() {
   const linkClassStyle = "m-5 text-sm font-light text-orange uppercase hover:text-orange-300";
   const [show, setShow] = useState(false);
-  const dispatch = useAppDispatch();
   const router = useRouter();
+  const { getUser,deleteUser } = UserService()
 
   // const user = useSelector((state: RootState) => selectUser(state)).user;
-  const user = UserService.getUser();
+  const user = getUser();
 
   const logOut = ()=>{
-    UserService.deleteUser();
+    deleteUser();
     TokenService.removeToken();
-    dispatch(removeUser());
     window.location.href = pageRouters.login;
 
   }
+
+  const pages = [
+    {name:'Home',link:pageRouters.home},
+    {name:'Artists',link:pageRouters.artists},
+    {name:'Book',link:pageRouters.booking},
+    {name:'Gallery',link:pageRouters.gallery}
+  ]
 
   const toggleShow = ()=>setShow(!show);
   return (
@@ -36,10 +40,11 @@ export default function Header() {
     <div className='sm:flex justify-between font-M hidden bg-black'>
       <div className='lg:w-10/12'>
         <div className='flex justify-center text-white'>
-            <Link className={linkClassStyle} href={pageRouters.home}>Home</Link>
-            <Link className={linkClassStyle} href={pageRouters.artists}>Artists</Link>
-            <Link className={linkClassStyle} href={pageRouters.booking}>Book</Link>
-            <Link className={linkClassStyle} href={pageRouters.gallery}>Gallery</Link>
+            {pages.map((page)=>{
+              return(
+                <Link key={page.name} href={page.link} className={linkClassStyle}>{page.name}</Link>
+              )
+            })}
             <Link className={`${linkClassStyle} flex`} href={pageRouters.contact}>
               Store <span className='text-red-500 text-xl ml-2'><HiShoppingBag /></span>
             </Link>
@@ -80,13 +85,14 @@ export default function Header() {
       
     </div>
     {show &&(
-      <div className='w-1/2 fixed h-full'>
+      <div className='w-1/2 fixed h-full sm:hidden'>
         <div className='flex flex-col justify-center text-white bg-black'>
-            <Link className={linkClassStyle} href={pageRouters.home}>Home</Link>
-            <Link className={linkClassStyle} href={pageRouters.artists}>Artists</Link>
-            <Link className={linkClassStyle} href={pageRouters.booking}>Book</Link>
-            <Link className={linkClassStyle} href={pageRouters.gallery}>Gallery</Link>
-            <Link className={linkClassStyle} href={pageRouters.contact}>Store</Link>
+        {pages.map((page)=>{
+              return(
+                <Link key={page.name} href={page.link} className={linkClassStyle} onClick={toggleShow}>{page.name}</Link>
+              )
+            })}
+            <Link className={linkClassStyle} href={pageRouters.contact} onClick={toggleShow}>Store</Link>
         </div>
       </div>
     )}
