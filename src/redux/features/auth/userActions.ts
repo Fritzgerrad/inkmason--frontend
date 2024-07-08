@@ -23,3 +23,17 @@ export const createUserAccount = createAsyncThunk(
     }
   }
 );
+
+export const getFullUserDetails = createAsyncThunk(
+  'user/get-full-details',
+  async (
+    id: string
+  ) => {
+    try {
+      const res = await apiService.get(`/user/${id}`);
+      return res;
+    } catch (error) {
+      console.log(error)
+    }
+  }
+)

@@ -3,6 +3,7 @@ import LoginForm from '@src/components/Auth/LoginForm';
 import { EMAIL, PASSWORD } from '@src/constants/form.constants';
 import { pageRouters } from '@src/constants/route.constants';
 import { TokenService } from '@src/libs/token.lib';
+import { UserService } from '@src/libs/user-data.lib';
 import { loginUser } from '@src/redux/features/auth/authActions';
 import { createNotification } from '@src/redux/features/auth/authSlice';
 import { useAppDispatch } from '@src/redux/hooks';
@@ -10,9 +11,6 @@ import { loginDataSchema } from '@src/schema/auth.schema';
 import { validateSchema } from '@src/utils/validate-input.utils';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
-import { createUser } from '@src/redux/features/auth/userSlice';
-import { useAppSelector } from '@src/redux/hooks';
-import { UserService } from '@src/libs/user-data.lib';
 
 const formValues = {
   [EMAIL]: '',
@@ -25,7 +23,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  
+  const { saveUser } = UserService()
   const handleChange = (name: string, value: string) => {
     setFormErrors((prev) => ({ ...prev, [name]: '' }));
     setFormState((prev) => ({ ...prev, [name]: value }));
@@ -48,14 +46,12 @@ const Login = () => {
     try {
       const { data } = await dispatch(loginUser(formState)).unwrap();
 
-      const { token, role,firstname,isVerified,id } = data || {};
+      const { token, role, firstname, userId,  } = data || {};
       console.log(data)
-      TokenService.setToken(token);
-      dispatch(createNotification({ message: 'Logged in successfully', type: 'success' }));
+      TokenService.setToken(token)
 
-      dispatch(createUser({id,firstname,role}));
-
-      UserService.saveUser({id,firstname,role});
+      const user = {firstname:firstname,role:role,id:userId}
+      saveUser(user)
 
       if (role === 'artist') {
         window.location.href = pageRouters.artists;

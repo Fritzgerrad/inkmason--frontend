@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { User } from "@src/models/User";
+
 
 interface Notification {
   id?: number;
@@ -32,6 +34,8 @@ export const authSlice = createSlice({
         (note) => note.id !== actions.payload
       );
     },
+
+
 
   },
 });
